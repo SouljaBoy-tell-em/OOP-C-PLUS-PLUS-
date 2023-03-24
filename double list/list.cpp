@@ -37,14 +37,14 @@ namespace LIST {
 
 int main(void) {
 
-	std:: vector<int> v(5);
+	/*
 
-	LIST:: List<int>   list1;
-	LIST:: List<int>   list2;
-	LIST:: List<int>   list3;
-	list1.Connect(1,   NULL);
-	list2.Connect(2, &list1);
-	list3.Connect(3, &list2);
+	LIST:: List<std:: string>   list1;
+	LIST:: List<std:: string>   list2;
+	LIST:: List<std:: string>   list3;
+	list1.Connect("812",        NULL);
+	list2.Connect("2014",     &list1);
+	list3.Connect("string",   &list2);
 
 	list1.Show();
 	std:: cout << std:: endl << std:: endl;
@@ -52,6 +52,12 @@ int main(void) {
 	std:: cout << std:: endl << std:: endl;
 	list3.Show();
 
+	*/
+
+
+
+	std:: vector<int> v(5);
+	
 
 	return 0;
 }
@@ -61,6 +67,9 @@ template<typename T>
 LIST:: List<T>:: List() {
 
 	next = prev = NULL;
+	head = NULL;
+	tail = NULL;
+
 	size = 0;
 }
 
