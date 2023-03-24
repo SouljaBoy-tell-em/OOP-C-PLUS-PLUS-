@@ -5,17 +5,16 @@
 
 namespace LIST {
 
-	static size_t size = 0;
-
 	template<typename T>
 	class List {
 
 		private:
-			List<T> * next;
-			List<T> * prev;
-			List<T> * tail;
-			size_t sizeList; // size of List;
-			T         elem;
+			List<T> *         next;
+			List<T> *         prev;
+			List<T> *         tail;
+			static uint64_t * head;
+			static size_t     size; // size of List;
+			T                 elem;
 
 		public:
 			List();
@@ -24,9 +23,13 @@ namespace LIST {
 			~List();
 			void Show(void) const;
 	};
-
-	uint64_t * head = NULL;
 }
+
+template<typename T>
+size_t LIST:: List<T>:: size = 0;
+template<typename T>
+uint64_t * LIST:: List<T>:: head = NULL;
+
 
 
 int main(void) {
@@ -52,7 +55,6 @@ LIST:: List<T>:: List() {
 
 	next = prev = tail = NULL;
 	size = 1;
-	sizeList = size;
 	elem = 0;
 }
 
@@ -74,7 +76,6 @@ LIST:: List<T>:: List(T m_elem, List<T> * prevElem) {
 		next = NULL;
 		prev = prevElem;
 		size++;
-		sizeList = size;
 		elem = m_elem;
 
 		return;
@@ -83,8 +84,8 @@ LIST:: List<T>:: List(T m_elem, List<T> * prevElem) {
 	tail = this;
 	next =  NULL;
 	prev =  prevElem;
+	prevElem->next = this;
 	size++;
-	sizeList = size;
 	elem = m_elem;
 }
 
