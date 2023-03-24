@@ -26,6 +26,7 @@ namespace LIST {
 			List(std:: vector<T> vect);
 			~List();
 			void Show(void) const;
+			bool operator==(const List<T> & list);
 	};
 
 	template<typename T>
@@ -41,6 +42,8 @@ namespace LIST {
 
 int main(void) {
 
+	/*
+
 	LIST:: List<std:: string>   list1;
 	LIST:: List<std:: string>   list2;
 	LIST:: List<std:: string>   list3;
@@ -53,6 +56,8 @@ int main(void) {
 	list2.Show();
 	std:: cout << std:: endl << std:: endl;
 	list3.Show();
+
+	*/
 
 
 
@@ -70,16 +75,27 @@ int main(void) {
 
 
 
-	/*
-	
+
 	LIST:: List<int>   list1;
 	LIST:: List<int>   list2;
-	list1.Connect(1,   NULL);
+	list1.Connect(21,   NULL);
 	list2.Connect(1, &list1);
 
-	*/
+	if (list1 == list2)
+		std:: cout << "list1 = list2"  << std:: endl;
+
+	else
+		std:: cout << "list1 != list2" << std:: endl;
+
 
 	return 0;
+}
+
+
+template<typename T>
+bool LIST:: List<T>:: operator==(const LIST:: List<T> & list) {
+
+	return (this->elem == list.elem);
 }
 
 
@@ -116,7 +132,7 @@ LIST:: List<T>:: List(std:: vector<T> vect) {
 
 
 template<typename T>
-void LIST:: List<T>:: Connect(T m_elem, List<T> * prevElem) {
+void LIST:: List<T>:: Connect(T m_elem, LIST:: List<T> * prevElem) {
 
 	if (!size) {
 
