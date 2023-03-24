@@ -23,13 +23,13 @@ namespace LIST {
 			~List();
 			void Show(void) const;
 	};
+
+	template<typename T>
+	size_t List<T>:: size = 0;
+
+	template<typename T>
+	uint64_t * List<T>:: head = NULL;	
 }
-
-template<typename T>
-size_t LIST:: List<T>:: size = 0;
-template<typename T>
-uint64_t * LIST:: List<T>:: head = NULL;
-
 
 
 int main(void) {
