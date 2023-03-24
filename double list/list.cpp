@@ -11,14 +11,14 @@ namespace LIST {
 		private:
 			List<T> *         next;
 			List<T> *         prev;
-			List<T> *         tail;
 			static uint64_t * head;
+			static uint64_t * tail;
 			static size_t     size; // size of List;
 			T                 elem;
 
 		public:
+			void Connect(T m_elem, List<T> * prevElem = NULL);
 			List();
-			List(T m_elem, List<T> * prevElem = NULL);
 			List(std:: vector<T> vect);
 			~List();
 			void Show(void) const;
@@ -28,7 +28,10 @@ namespace LIST {
 	size_t List<T>:: size = 0;
 
 	template<typename T>
-	uint64_t * List<T>:: head = NULL;	
+	uint64_t * List<T>:: head = NULL;
+
+	template<typename T>
+	uint64_t * List<T>:: tail = NULL;
 }
 
 
@@ -36,9 +39,13 @@ int main(void) {
 
 	std:: vector<int> v(5);
 
-	LIST:: List<int> list1(1,     NULL);
-	LIST:: List<int> list2(2,   &list1);
-	LIST:: List<int> list3(812, &list2);
+	LIST:: List<int>   list1;
+	LIST:: List<int>   list2;
+	LIST:: List<int>   list3;
+	list1.Connect(1,   NULL);
+	list2.Connect(2, &list1);
+	list3.Connect(3, &list2);
+
 	list1.Show();
 	std:: cout << std:: endl << std:: endl;
 	list2.Show();
@@ -53,9 +60,8 @@ int main(void) {
 template<typename T>
 LIST:: List<T>:: List() {
 
-	next = prev = tail = NULL;
-	size = 1;
-	elem = 0;
+	next = prev = NULL;
+	size = 0;
 }
 
 
@@ -67,11 +73,11 @@ LIST:: List<T>:: List(std:: vector<T> v) {
 
 
 template<typename T>
-LIST:: List<T>:: List(T m_elem, List<T> * prevElem) {
+void LIST:: List<T>:: Connect(T m_elem, List<T> * prevElem) {
 
 	if (!size) {
 
-		tail = this;
+		tail = (uint64_t * )this;
 		head = (uint64_t * )tail;
 		next = NULL;
 		prev = prevElem;
@@ -81,9 +87,9 @@ LIST:: List<T>:: List(T m_elem, List<T> * prevElem) {
 		return;
 	}
 
-	tail = this;
-	next =  NULL;
-	prev =  prevElem;
+	tail = (uint64_t *)this;
+	next = NULL;
+	prev = prevElem;
 	prevElem->next = this;
 	size++;
 	elem = m_elem;
