@@ -26,7 +26,14 @@ namespace LIST {
 			List(std:: vector<T> vect);
 			~List();
 			void Show(void) const;
+
 			bool operator==(const List<T> & list);
+			bool operator!=(const List<T> & list);
+			void operator= (const List<T> & list);
+
+			typedef typename std::vector<T>:: iterator iterator;
+			inline iterator Begin(List<T> list) noexcept { return list.begin(); };
+			inline iterator End(List<T> list)   noexcept { return list.end();   };
 	};
 
 	template<typename T>
@@ -78,8 +85,10 @@ int main(void) {
 
 	LIST:: List<int>   list1;
 	LIST:: List<int>   list2;
-	list1.Connect(21,   NULL);
-	list2.Connect(1, &list1);
+	list1.Connect(1,   NULL);
+	list2.Connect(37, &list1);
+
+	/*
 
 	if (list1 == list2)
 		std:: cout << "list1 = list2"  << std:: endl;
@@ -87,6 +96,23 @@ int main(void) {
 	else
 		std:: cout << "list1 != list2" << std:: endl;
 
+	*/
+
+	/*
+
+	if (list1 != list2)
+		std:: cout << "list1 != list2" << std:: endl;
+	
+	else
+		std:: cout << "list1 == list2" << std:: endl;
+	
+	*/
+	
+	list1.Show();
+	list2.Show();
+	list1 = list2;
+	list1.Show();
+	list2.Show();
 
 	return 0;
 }
@@ -96,6 +122,20 @@ template<typename T>
 bool LIST:: List<T>:: operator==(const LIST:: List<T> & list) {
 
 	return (this->elem == list.elem);
+}
+
+
+template<typename T>
+bool LIST:: List<T>:: operator!=(const LIST:: List<T> & list) {
+
+	return (this->elem != list.elem);
+}
+
+
+template<typename T>
+void LIST:: List<T>:: operator=(const LIST:: List<T> & list) {
+
+	this->elem = list.elem;
 }
 
 
@@ -128,6 +168,12 @@ LIST:: List<T>:: List(std:: vector<T> vect) {
 	}
 
 	( * this) = arrList[0];
+
+	//-----------------
+	// iterators block
+	//-----------------
+	std:: vector<LIST:: List<T> >:: iterator itStart = arrList.begin();
+	std:: vector<LIST:: List<T> >:: iterator itEnd   = arrList.end();
 }
 
 
@@ -186,3 +232,4 @@ void LIST:: List<T>:: ConsistentShow() {
 		save = save->next;
 	}
 }
+
