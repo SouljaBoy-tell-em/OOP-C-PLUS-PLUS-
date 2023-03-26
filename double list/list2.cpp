@@ -12,11 +12,12 @@ namespace LIST {
 	class Node {
 
 		private:
-			Node<T> * prev;
 			T         elem;
 		
 		public:
+			Node<T> * prev;
 			Node<T> * next;
+			
 			void Connect(Node<T> * head, Node<T> * tail);
 			Node();
 			Node(T m_elem);
@@ -25,7 +26,8 @@ namespace LIST {
 
 			bool operator==(const Node<T> & node);
 			bool operator!=(const Node<T> & node);
-			//void operator= (const List<T> & list);
+			Node<T> operator=(const Node<T> & node);
+			Node<T> operator=(T m_elem);
 	};
 	
 	template<class T>
@@ -39,6 +41,7 @@ namespace LIST {
 			Node<T> *  head;
 
 			List(Node<T> * m_head = NULL);
+			List(std:: vector<LIST:: Node<T> > & vect);
 			void Push(Node<T> * addNode);
 			~List();
 			void Show(void) const;
@@ -66,7 +69,16 @@ int main(void) {
 
 	*/
 
-	
+	std:: vector<LIST:: Node<int> > a(5);
+	a[0] = 0;
+	a[1] = 1;
+	a[2] = 2;
+	a[3] = 3;
+	a[4] = 4;
+
+	LIST:: List<int> list(a);
+	list.Show(); 
+
 
 	return 0;
 }
@@ -77,6 +89,17 @@ LIST:: List<T>:: List(Node<T> * m_head) {
 
 	size = 0;
 	this->Push(m_head);
+}
+
+
+template<typename T>
+LIST:: List<T>:: List(std:: vector<LIST:: Node<T> > & vect) {
+	
+	size = 0;
+
+	int index = 0;
+	for(index = 0; index < vect.size(); index++)
+		this->Push(&vect[index]);
 }
 
 
@@ -102,7 +125,7 @@ void LIST:: List<T>:: Push(Node<T> * addNode) {
 	tail->next       =    addNode;
 	addNode->Connect(head,  tail);
 	tail             =    addNode;
-
+	head->prev       =       tail;
 	size++;
 }
 
@@ -177,19 +200,17 @@ bool LIST:: Node<T>:: operator!=(const LIST:: Node<T> & node) {
 }
 
 
-
-
-/*
-
 template<class T>
-void LIST:: List<T>:: operator=(const LIST:: List<T> & list) {
-
-	this->elem = list.elem;
+LIST:: Node<T> LIST:: Node<T>:: operator=(const LIST:: Node<T> & node) {
+	
+	this->elem = node.elem;
+	return node.elem;
 }
 
-*/
 
+template<class T>
+LIST:: Node<T> LIST:: Node<T>:: operator=(T m_elem) {
 
-
-
-
+	this->elem = m_elem;
+	return m_elem;
+}
