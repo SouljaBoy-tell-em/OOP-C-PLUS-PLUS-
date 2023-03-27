@@ -17,7 +17,7 @@ namespace LIST {
 		public:
 			Node<T> * prev;
 			Node<T> * next;
-			
+
 			void Connect(Node<T> * head, Node<T> * tail);
 			Node();
 			Node(T m_elem);
@@ -45,6 +45,9 @@ namespace LIST {
 			void Push(Node<T> * addNode);
 			~List();
 			void Show(void) const;
+
+			inline typename std:: vector<Node<T> >:: iterator Begin(std:: vector<Node<T> > vect) { return vect.begin(); }
+			inline typename std:: vector<Node<T> >:: iterator   End(std:: vector<Node<T> > vect) { return vect.end();   }
 	};
 }
 
@@ -77,8 +80,12 @@ int main(void) {
 	a[4] = 4;
 
 	LIST:: List<int> list(a);
-	list.Show(); 
+	//list.Show(); 
 
+	typename std:: vector<LIST:: Node<int> >:: iterator it;
+	for(it = a.begin(); it < a.end(); it++)
+		std:: cout << *it << " ";
+	
 
 	return 0;
 }
