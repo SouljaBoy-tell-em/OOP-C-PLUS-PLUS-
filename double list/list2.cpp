@@ -1,4 +1,4 @@
-#pragma GCC diagnostic ignored "-Wnon-template-friend"
+#pragma GCC diagnostic ignored "-Wc++11-extensions"
 
 
 #include <iostream>
@@ -28,8 +28,6 @@ namespace LIST {
 			bool operator!=(const Node<T> & node);
 			Node<T> operator=(const Node<T> & node);
 			Node<T> operator=(T m_elem);
-
-			friend std:: ostream & operator<<(std:: ostream & os, Node<T> node);
 	};
 	
 	template<class T>
@@ -42,14 +40,25 @@ namespace LIST {
 		public:
 			Node<T> *  head;
 
+			Node<T> * GetLastElem() const;
 			List(Node<T> * m_head = NULL);
 			List(std:: vector<LIST:: Node<T> > & vect);
 			void Push(Node<T> * addNode);
 			~List();
 			void Show(void) const;
 
-			inline typename std:: vector<Node<T> >:: iterator Begin(std:: vector<Node<T> > vect) { return vect.begin(); }
-			inline typename std:: vector<Node<T> >:: iterator   End(std:: vector<Node<T> > vect) { return vect.end();   }
+			class Iterator {
+
+				private:
+					Node<T> * list;
+
+				public:
+					Iterator(List<T> * list) {list = list->head;}
+					inline typename std:: vector<Node<T> >:: iterator Begin()
+					{return list;}
+					inline typename std:: vector<Node<T> >:: iterator End()
+					{return list->GetLastElem(); }
+			};
 	};
 }
 
@@ -57,21 +66,15 @@ namespace LIST {
 int main(void) {
 
 	/*
-
 	LIST:: Node<int> a1(1);
 	LIST:: Node<int> a2(2);
-
 	LIST:: List<int> list(&a1);
 	list.Push(&a2);
-
 	list.Show();
-
 	if (a1 == a2)
 		std:: cout << "a1 = a2"  << std:: endl;
-
 	if (a1 != a2)
 		std:: cout << "a1 != a2" << std:: endl;
-
 	*/
 
 
@@ -82,12 +85,12 @@ int main(void) {
 	a[3] = 3;
 	a[4] = 4;
 
-	LIST:: List<int> list(a);
+	//LIST:: List<int> list(a);
 	//list.Show(); 
 
-	typename std:: vector<LIST:: Node<int> >:: iterator it;
-	for(it = a.begin(); it < a.end(); it++)
-		std:: cout << (*it);
+	//LIST:: Node<int>:: Iterator iterator;
+
+	//std:: cout << *it;
 	
 
 	return 0;
@@ -156,6 +159,21 @@ void LIST:: List<T>:: Show(void) const {
 
 	save->Show();
 }
+
+
+template<class T>
+LIST:: Node<T> * LIST:: List<T>:: GetLastElem() const {
+
+	LIST:: Node<T> * save = head;
+	while(save->next != head)
+		save = save->next;
+
+	return save;
+}
+
+
+
+
 
 
 //------
@@ -231,12 +249,4 @@ LIST:: Node<T> LIST:: Node<T>:: operator=(T m_elem) {
 
 	this->elem = m_elem;
 	return m_elem;
-}
-
-
-template<class T>
-std:: ostream & operator<<(std:: ostream & os, LIST:: Node<T> node) {
-
-	os << node.elem;
-	return os;
 }
