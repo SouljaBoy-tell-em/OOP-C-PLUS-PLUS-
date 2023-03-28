@@ -28,6 +28,8 @@ namespace LIST {
 			bool operator!=(const Node<T> & node);
 			Node<T> operator=(const Node<T> & node);
 			Node<T> operator=(T m_elem);
+
+			friend std:: ostream & operator<<(std:: ostream & os, Node<T> node);
 	};
 	
 	template<class T>
@@ -72,6 +74,7 @@ int main(void) {
 
 	*/
 
+
 	std:: vector<LIST:: Node<int> > a(5);
 	a[0] = 0;
 	a[1] = 1;
@@ -84,12 +87,16 @@ int main(void) {
 
 	typename std:: vector<LIST:: Node<int> >:: iterator it;
 	for(it = a.begin(); it < a.end(); it++)
-		std:: cout << *it << " ";
+		std:: cout << (*it);
 	
 
 	return 0;
 }
 
+
+//------
+// LIST
+//------
 
 template<class T>
 LIST:: List<T>:: List(Node<T> * m_head) {
@@ -150,6 +157,10 @@ void LIST:: List<T>:: Show(void) const {
 	save->Show();
 }
 
+
+//------
+// NODE
+//------
 
 template<class T>
 LIST:: Node<T>:: Node() {
@@ -220,4 +231,12 @@ LIST:: Node<T> LIST:: Node<T>:: operator=(T m_elem) {
 
 	this->elem = m_elem;
 	return m_elem;
+}
+
+
+template<class T>
+std:: ostream & operator<<(std:: ostream & os, LIST:: Node<T> node) {
+
+	os << node.elem;
+	return os;
 }
