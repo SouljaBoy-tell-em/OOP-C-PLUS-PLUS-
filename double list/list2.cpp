@@ -1,6 +1,3 @@
-#pragma GCC diagnostic ignored "-Wc++11-extensions"
-
-
 #include <iostream>
 #include <iterator>
 #include <vector>
@@ -10,55 +7,59 @@ namespace LIST {
 	
 	template<class T>
 	class Node {
-
-		private:
-			T         elem;
 		
 		public:
 			Node<T> * prev;
 			Node<T> * next;
+			T         elem;
 
 			void Connect(Node<T> * head, Node<T> * tail);
+			Node<T> * GetLastElem();
 			Node();
 			Node(T m_elem);
-			~Node();
+			~Node() {}
 			void Show() const;
 
-			bool operator==(const Node<T> & node);
-			bool operator!=(const Node<T> & node);
-			Node<T> operator=(const Node<T> & node);
-			Node<T> operator=(T m_elem);
+			bool    operator==(const Node<T> & node);
+			bool    operator!=(const Node<T> & node);
+			Node<T> operator= (const Node<T> & node);
+			Node<T> operator= (T             m_elem);
 	};
 	
 	template<class T>
 	class List {
 
-		private:
-			Node<T> *  tail;
-			size_t     size; // size of List;
-
 		public:
 			Node<T> *  head;
 
-			Node<T> * GetLastElem() const;
+			inline Node<T> * begin() {Iterator IteratorBegin(head); return IteratorBegin.Begin(); }
+			inline Node<T> * end()   {Iterator IteratorEnd(head);   return IteratorEnd.End();     }
+
 			List(Node<T> * m_head = NULL);
 			List(std:: vector<LIST:: Node<T> > & vect);
+			~List() {}
 			void Push(Node<T> * addNode);
-			~List();
 			void Show(void) const;
 
 			class Iterator {
 
 				private:
 					Node<T> * list;
+					T *       elem;
 
 				public:
-					Iterator(List<T> * list) {list = list->head;}
-					inline typename std:: vector<Node<T> >:: iterator Begin()
-					{return list;}
-					inline typename std:: vector<Node<T> >:: iterator End()
-					{return list->GetLastElem(); }
+					Iterator(Node<T> * NodeStart = NULL) {list = NodeStart;           }
+					Iterator() {list = NULL; elem = NULL;                             }
+					friend void operator=(Iterator & iterator, Node<T> * node) { }
+					inline Node<T> * Begin()             {return list;                }
+					inline Node<T> * End()	             {return list->GetLastElem(); }
+
+					Node<T> * lol;
 			};
+
+		private:
+			Node<T> *  tail;
+			size_t     size; // size of List;
 	};
 }
 
@@ -85,12 +86,12 @@ int main(void) {
 	a[3] = 3;
 	a[4] = 4;
 
-	//LIST:: List<int> list(a);
+	LIST:: List<int> list(a);
 	//list.Show(); 
 
-	//LIST:: Node<int>:: Iterator iterator;
-
-	//std:: cout << *it;
+	LIST:: List<int>:: Iterator it();
+	it = list.end();
+	std:: cout << (list.end())->elem;
 	
 
 	return 0;
@@ -117,13 +118,6 @@ LIST:: List<T>:: List(std:: vector<LIST:: Node<T> > & vect) {
 	int index = 0;
 	for(index = 0; index < vect.size(); index++)
 		this->Push(&vect[index]);
-}
-
-
-template<class T>
-LIST:: List<T>:: ~List() {
-
-	std:: cout << "list closed." << std:: endl;
 }
 
 
@@ -162,10 +156,10 @@ void LIST:: List<T>:: Show(void) const {
 
 
 template<class T>
-LIST:: Node<T> * LIST:: List<T>:: GetLastElem() const {
+LIST:: Node<T> * LIST:: Node<T>:: GetLastElem() {
 
-	LIST:: Node<T> * save = head;
-	while(save->next != head)
+	LIST:: Node<T> * save = this;
+	while(save->next != this)
 		save = save->next;
 
 	return save;
@@ -193,13 +187,6 @@ LIST:: Node<T>:: Node(T m_elem) {
 
 	next = prev = NULL;
 	elem = m_elem;
-}
-
-
-template<class T>
-LIST:: Node<T>:: ~Node() {
-
-	std:: cout << "node closed." << std:: endl;
 }
 
 
