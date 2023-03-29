@@ -32,34 +32,33 @@ namespace LIST {
 		public:
 			Node<T> *  head;
 
-			inline Node<T> * begin() {Iterator IteratorBegin(head); return IteratorBegin.Begin(); }
-			inline Node<T> * end()   {Iterator IteratorEnd(head);   return IteratorEnd.End();     }
-
 			List(Node<T> * m_head = NULL);
 			List(std:: vector<LIST:: Node<T> > & vect);
 			~List() {}
 			void Push(Node<T> * addNode);
 			void Show(void) const;
 
-			class Iterator {
-
-				private:
-					Node<T> * list;
-					T *       elem;
-
-				public:
-					Iterator(Node<T> * NodeStart = NULL) {list = NodeStart;           }
-					Iterator() {list = NULL; elem = NULL;                             }
-					friend void operator=(Iterator & iterator, Node<T> * node) { }
-					inline Node<T> * Begin()             {return list;                }
-					inline Node<T> * End()	             {return list->GetLastElem(); }
-
-					Node<T> * lol;
-			};
+			Node<T> * begin() {return head; }
+			Node<T> * end() {return head->GetLastElem(); }
 
 		private:
 			Node<T> *  tail;
 			size_t     size; // size of List;
+	};
+
+	template<class T>
+	class Iterator {
+
+		private:
+			Node<T> * head;
+			T *       elem;
+
+		public:
+			Iterator() {head = NULL; elem = NULL; }
+
+			void operator=(Node<T> * node) {head = node; elem = &(node->elem);}
+			friend T operator*(Iterator & iterator) {return *(iterator.elem); }
+			//friend std:: ostream & operator<<(std:: ostream & os, Node<T> * node) {std:: cout << node << " " << node->elem; return os; }
 	};
 }
 
@@ -88,11 +87,14 @@ int main(void) {
 
 	LIST:: List<int> list(a);
 	//list.Show(); 
-
-	LIST:: List<int>:: Iterator it();
-	it = list.end();
-	std:: cout << (list.end())->elem;
 	
+	LIST:: Iterator<int> it1;
+	LIST:: Iterator<int> it2;
+	it1 = list.begin();
+	it2 = list.end();
+
+	std:: cout << "it1 begin: " << *it1 << std:: endl;
+	std:: cout << "it2 end: "   << *it2 << std:: endl;
 
 	return 0;
 }
