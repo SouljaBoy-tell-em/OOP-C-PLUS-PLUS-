@@ -31,6 +31,7 @@ namespace LIST {
 
 		public:
 			Node<T> *  head;
+			Node<T> *  tail;
 
 			List(Node<T> * m_head = NULL);
 			List(std:: vector<LIST:: Node<T> > & vect);
@@ -42,7 +43,6 @@ namespace LIST {
 			Node<T> * end() {return head->GetLastElem(); }
 
 		private:
-			Node<T> *  tail;
 			size_t     size; // size of List;
 	};
 
@@ -51,14 +51,19 @@ namespace LIST {
 
 		private:
 			Node<T> * head;
+			Node<T> * tail;
+			Node<T> * node;
 			T *       elem;
 
 		public:
-			Iterator() {head = NULL; elem = NULL; }
+			Iterator() {head = NULL; tail = NULL; node = NULL; elem = NULL;}
 
-			void operator=(Node<T> * node) {head = node; elem = &(node->elem);}
-			friend T operator*(Iterator & iterator) {return *(iterator.elem); }
-			//friend std:: ostream & operator<<(std:: ostream & os, Node<T> * node) {std:: cout << node << " " << node->elem; return os; }
+			void operator=(Node<T> * node);
+			friend T operator*(Iterator<T> & iterator) {return *(iterator.elem); }
+			Iterator<T> & operator++(T);
+			Iterator<T> & operator--(T);
+			Iterator<T> & operator+=(int delta);
+			Iterator<T> & operator-=(int delta);
 	};
 }
 
@@ -96,7 +101,110 @@ int main(void) {
 	std:: cout << "it1 begin: " << *it1 << std:: endl;
 	std:: cout << "it2 end: "   << *it2 << std:: endl;
 
+
+	it1++;
+	std:: cout << "new it1: "   << *it1 << std:: endl;
+	it1++;
+	std:: cout << "new it1: "   << *it1 << std:: endl;
+	it1++;
+	std:: cout << "new it1: "   << *it1 << std:: endl;
+	it1++;
+	std:: cout << "new it1: "   << *it1 << std:: endl;
+	it1++;
+	std:: cout << "new it1: "   << *it1 << std:: endl;
+
+	it2+=2;
+	std:: cout << "new it2: "   << *it2 << std:: endl;
+
+	/*
+
+	it1+=10;
+	std:: cout << "new it1: "   << *it1 << std:: endl;
+
+	it2--;
+	it2++;
+	std:: cout << "new it2: "   << *it2 << std:: endl;
+
+	it2+=10;
+	std:: cout << "new it2: "   << *it2 << std:: endl;
+
+	*/
+
+
 	return 0;
+}
+
+
+//----------
+// ITERATOR
+//----------
+
+template<class T>
+void LIST:: Iterator<T>:: operator=(Node<T> * m_node) {
+
+	head = node = m_node;
+	tail = head->prev;
+	elem = &(m_node->elem);
+}
+
+
+template<typename T>
+LIST:: Iterator<T> & LIST:: Iterator<T>:: operator++(T) {
+
+	if(node == tail)
+		return * this;
+
+	elem = &((node->next)->elem);
+	node = node->next;
+
+	return * this;
+}
+
+
+template<typename T>
+LIST:: Iterator<T> & LIST:: Iterator<T>:: operator--(T) {
+
+	if(node == head)
+		return * this;
+
+	elem = &((node->prev)->elem);
+	node = node->prev;
+
+	return * this;
+}
+
+
+template<typename T>
+LIST:: Iterator<T> & LIST:: Iterator<T>:: operator+=(int delta) {
+
+	int i = 0;
+	for(i = 0; i < delta; i++) {
+
+		if(node == tail)
+			return * this;-------
+
+		elem = &((node->next)->elem);
+		node = node->next;
+	}
+
+	return * this;
+}
+
+
+template<typename T>
+LIST:: Iterator<T> & LIST:: Iterator<T>:: operator-=(int delta) {
+
+	int i = 0;
+	for(i = delta; i > 0; i--) {
+
+		if (node == head)
+			return * this;
+		
+		elem = &((node->prev)->elem);
+		node = node->prev;
+	}
+
+	return * this;
 }
 
 
@@ -166,10 +274,6 @@ LIST:: Node<T> * LIST:: Node<T>:: GetLastElem() {
 
 	return save;
 }
-
-
-
-
 
 
 //------
