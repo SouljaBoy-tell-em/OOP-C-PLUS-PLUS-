@@ -20,8 +20,8 @@ namespace LIST {
 			~Node() {}
 			void Show() const;
 
-			bool    operator==(const Node<T> & node);
-			bool    operator!=(const Node<T> & node);
+			bool    operator==(const Node<T> & node) {return (this->elem == node.elem); }
+			bool    operator!=(const Node<T> & node) {return (this->elem != node.elem); }
 			Node<T> operator= (const Node<T> & node);
 			Node<T> operator= (T             m_elem);
 	};
@@ -39,7 +39,7 @@ namespace LIST {
 			void Push(Node<T> * addNode);
 			void Show(void) const;
 
-			Node<T> * begin() {return head; }
+			Node<T> * begin() {return head;              }
 			Node<T> * end() {return head->GetLastElem(); }
 
 		private:
@@ -57,6 +57,7 @@ namespace LIST {
 
 		public:
 			Iterator() {head = NULL; tail = NULL; node = NULL; elem = NULL;}
+			Iterator<T> & insert(const Iterator<T> & iterator, T m_elem);
 
 			void operator=(Node<T> * node);
 			friend T operator*(Iterator<T> & iterator) {return *(iterator.elem); }
@@ -64,6 +65,9 @@ namespace LIST {
 			Iterator<T> & operator--(T);
 			Iterator<T> & operator+=(int delta);
 			Iterator<T> & operator-=(int delta);
+			bool operator!=(const Iterator<T> & iterator) {return (this->elem != iterator.elem); }
+			bool operator==(const Iterator<T> & iterator) {return (this->elem == iterator.elem); }
+			Iterator<T> & operator=(const Iterator<T> & iterator);
 	};
 }
 
@@ -116,8 +120,6 @@ int main(void) {
 	it2-=31;
 	std:: cout << "new it2: "   << *it2 << std:: endl;
 
-	/*
-
 	it1+=10;
 	std:: cout << "new it1: "   << *it1 << std:: endl;
 
@@ -128,8 +130,16 @@ int main(void) {
 	it2+=10;
 	std:: cout << "new it2: "   << *it2 << std:: endl;
 
-	*/
+	it2-=10;
+	std:: cout << "new it2: "   << *it2 << std:: endl;
 
+	it1 = it2;
+	std:: cout << "new it1: "   << *it1 << std:: endl;
+
+	it1++;
+	it2 = it1;
+	std:: cout << "new it1: "  << *it1  << std:: endl;
+	std:: cout << "new it2: "  << *it2  << std:: endl;
 
 	return 0;
 }
@@ -138,6 +148,15 @@ int main(void) {
 //----------
 // ITERATOR
 //----------
+
+template<typename T>
+LIST:: Iterator<T> & LIST:: Iterator<T>:: insert(const Iterator<T> & iterator, T m_elem) {
+
+	Iterator<T> * EndIterator = this;
+	while(EndIterator <= &iterator)
+		EndIterator += sizeof(Iterator<T>);
+}
+
 
 template<class T>
 void LIST:: Iterator<T>:: operator=(Node<T> * m_node) {
@@ -155,6 +174,18 @@ void LIST:: Iterator<T>:: operator=(Node<T> * m_node) {
 		head = tail->next;
 		elem = &(m_node->elem);
 	}
+}
+
+
+template<typename T>
+LIST:: Iterator<T> & LIST:: Iterator<T>:: operator=(const Iterator<T> & iterator) {
+
+	this->elem = iterator.elem;
+	this->head = iterator.head;
+	this->node = iterator.node;
+	this->tail = iterator.tail;
+
+	return * this;
 }
 
 
@@ -322,20 +353,6 @@ void LIST:: Node<T>:: Connect(Node<T> * head, Node<T> * tail) {
 
 	next = head;
 	prev = tail;
-}
-
-
-template<class T>
-bool LIST:: Node<T>:: operator==(const LIST:: Node<T> & node) {
-
-	return (this->elem == node.elem);
-}
-
-
-template<class T>
-bool LIST:: Node<T>:: operator!=(const LIST:: Node<T> & node) {
-
-	return (this->elem != node.elem);
 }
 
 
