@@ -60,11 +60,14 @@ namespace LIST {
 			Iterator<T> & insert(const Iterator<T> & iterator, T m_elem);
 
 			void operator=(Node<T> * node);
+			Iterator<T> operator+(int delta);
+			Iterator<T> operator-(int delta);
 			friend T operator*(Iterator<T> & iterator) {return *(iterator.elem); }
 			Iterator<T> & operator++(T);
 			Iterator<T> & operator--(T);
 			Iterator<T> & operator+=(int delta);
 			Iterator<T> & operator-=(int delta);
+			//Iterator<T> & operator+(int delta);
 			bool operator!=(const Iterator<T> & iterator) {return (this->elem != iterator.elem); }
 			bool operator==(const Iterator<T> & iterator) {return (this->elem == iterator.elem); }
 			Iterator<T> & operator=(const Iterator<T> & iterator);
@@ -99,8 +102,10 @@ int main(void) {
 	
 	LIST:: Iterator<int> it1;
 	LIST:: Iterator<int> it2;
+	LIST:: Iterator<int> it3;
 	it1 = list.begin();
 	it2 = list.end();
+	it3 = list.begin();
 
 	std:: cout << "it1 begin: " << *it1 << std:: endl;
 	std:: cout << "it2 end: "   << *it2 << std:: endl;
@@ -135,11 +140,29 @@ int main(void) {
 
 	it1 = it2;
 	std:: cout << "new it1: "   << *it1 << std:: endl;
+	std:: cout << std:: endl            << std:: endl;
+
+
+
+	std:: cout << "new it3: "  << *it3  << std:: endl;
 
 	it1++;
 	it2 = it1;
+	it3 = it1 + 2;
+	it3 -= 10;
 	std:: cout << "new it1: "  << *it1  << std:: endl;
 	std:: cout << "new it2: "  << *it2  << std:: endl;
+	std:: cout << "new it3: "  << *it3  << std:: endl;
+
+	it3--;
+	std:: cout << "new it3: "  << *it3  << std:: endl;
+
+	it3+=5;
+	std:: cout << "new it3: "  << *it3  << std:: endl;
+
+	std:: cout << "new it3: "  << *it3  << std:: endl;
+	std:: cout << "new it3: "  << *it3  << std:: endl;
+
 
 	return 0;
 }
@@ -152,9 +175,47 @@ int main(void) {
 template<typename T>
 LIST:: Iterator<T> & LIST:: Iterator<T>:: insert(const Iterator<T> & iterator, T m_elem) {
 
-	Iterator<T> * EndIterator = this;
-	while(EndIterator <= &iterator)
-		EndIterator += sizeof(Iterator<T>);
+	//(iterator.next)->elem = m_elem;
+
+	return iterator;
+}
+
+
+template<class T>
+LIST:: Iterator<T> LIST:: Iterator<T>:: operator+(int delta) {
+
+	Iterator<T> CurrentIterator = * this;
+
+	int index = 0;
+	for(index = 0; index < delta; index++) {
+
+		if(CurrentIterator.node == this->tail)
+			return CurrentIterator;
+
+		CurrentIterator.elem = &(((CurrentIterator.node)->next)->elem);
+		CurrentIterator.node = (CurrentIterator.node)->next;
+	}
+
+	return CurrentIterator;
+}
+
+
+template<class T>
+LIST:: Iterator<T> LIST:: Iterator<T>:: operator-(int delta) {
+
+	Iterator<T> CurrentIterator = * this;
+
+	int index = 0;
+	for(index = 0; index < delta; index++) {
+
+		if(CurrentIterator.node == this->head)
+			return CurrentIterator;
+
+		CurrentIterator.elem = &(((CurrentIterator.node)->prev)->elem);
+		CurrentIterator.node = (CurrentIterator.node)->prev;
+	}
+
+	return CurrentIterator;
 }
 
 
