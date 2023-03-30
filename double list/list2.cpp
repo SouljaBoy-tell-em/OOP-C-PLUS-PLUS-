@@ -113,7 +113,7 @@ int main(void) {
 	it1++;
 	std:: cout << "new it1: "   << *it1 << std:: endl;
 
-	it2+=2;
+	it2-=31;
 	std:: cout << "new it2: "   << *it2 << std:: endl;
 
 	/*
@@ -142,9 +142,19 @@ int main(void) {
 template<class T>
 void LIST:: Iterator<T>:: operator=(Node<T> * m_node) {
 
-	head = node = m_node;
-	tail = head->prev;
-	elem = &(m_node->elem);
+	if(m_node - m_node->next < 0) {
+
+		head = node = m_node;
+		tail = head->prev;
+		elem = &(m_node->elem);
+	}
+
+	else {
+
+		tail = node = m_node;
+		head = tail->next;
+		elem = &(m_node->elem);
+	}
 }
 
 
@@ -181,7 +191,7 @@ LIST:: Iterator<T> & LIST:: Iterator<T>:: operator+=(int delta) {
 	for(i = 0; i < delta; i++) {
 
 		if(node == tail)
-			return * this;-------
+			return * this;
 
 		elem = &((node->next)->elem);
 		node = node->next;
