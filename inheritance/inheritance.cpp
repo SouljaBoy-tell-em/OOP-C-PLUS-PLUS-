@@ -1,6 +1,6 @@
 #include <iostream>
 #include <stdexcept>
-#include <vector>
+#include <vector>													
 
 
 enum AnimalType      {CAT, PARROT};
@@ -113,6 +113,8 @@ class Parrot : public Animal {
 };
 
 
+template<class T>
+void EditVector(Animal * ptr, std:: vector<T> & vect);
 template <class T>
 void Remove(std:: vector<T> & vect, size_t index);
 
@@ -146,6 +148,22 @@ Animal:: Animal(std:: string m_name, int m_age, AnimalType m_AnimalType,
 }
 
 
+template<class T>
+void EditVector(Animal * ptr, std:: vector<T> & vect) {
+
+	int index = 0;
+	for(index = 0; index < vect.size(); index++) {
+
+		if(ptr == &vect[index]) {
+			std:: cout << "Animal №" << index + 1 << " was removed.";
+			std:: cout << std:: endl;									
+			Remove(vect, index);										
+			break;													
+		}												
+	}
+}
+
+
 Food:: Food(double m_calories, FoodType m_type) {
 
 	calories = m_calories;
@@ -162,19 +180,8 @@ void Animal:: Eat(T1 & food, std:: vector<T> & vect) {
 	else if(this->type == PARROT && food.GetType() != FRUIT)
 		throw std:: invalid_argument("Parrot doesn't eat not fruits.");
 
-	if(food.GetCalories() > MaxFoodSize) {
-
-		int index = 0;
-		for(index = 0; index < vect.size(); index++) {
-
-			if(this == &vect[index]) {
-
-				std:: cout << "Animal №" << index + 1 << " was removed.";
-				std:: cout << std:: endl; 
-				Remove(vect, index);
-			}
-		}
-	}
+	if(food.GetCalories() > MaxFoodSize)
+		EditVector(this, vect);
 
 	satiety += food.GetCalories();
 }
@@ -186,17 +193,7 @@ void Animal:: Multiply(Animal & animal, std:: vector<T> & vect) {
 	if(this == &animal) {
 
 		std:: cout << "Error. Auto-muptiply" << std:: endl;
-
-		int index = 0;
-		for(index = 0; index < vect.size(); index++) {
-
-			if(&animal == &vect[index]) {
-
-				std:: cout << "Animal №" << index + 1 << " was removed.";
-				std:: cout << std:: endl; 
-				Remove(vect, index);
-			}
-		}
+		EditVector(this, vect);
 
 		return;
 	}
@@ -222,20 +219,8 @@ void Animal:: Run(size_t minutes, std:: vector<T> & vect) {
 
 	satiety-= minutes;
 
-	if(satiety < 0) {
-
-		int index = 0;
-		for(index = 0; index < vect.size(); index++) {
-
-			if(this == &vect[index]) {
-
-				std:: cout << "Animal №" << index + 1 << " was removed.";
-				std:: cout << std:: endl; 
-				Remove(vect, index);
-			}
-		}
-	}
-		
+	if(satiety < 0)
+		EditVector(this, vect);	
 }
 
 
@@ -248,4 +233,7 @@ void Cat:: Show() {
 	
 	if(!type)
 	std:: cout << "type: CAT"                 << std:: endl;
+	
+	else
+	std:: cout << "type: PARROT"              << std:: endl;
 }
