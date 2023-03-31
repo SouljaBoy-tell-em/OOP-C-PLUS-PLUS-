@@ -57,7 +57,8 @@ namespace LIST {
 
 		public:
 			Iterator() {head = NULL; tail = NULL; node = NULL; elem = NULL;}
-			Iterator<T> & insert(const Iterator<T> & iterator, T m_elem);
+			Iterator<T> & insert(T m_elem);
+			Iterator<T> & erase();
 
 			void operator=(Node<T> * node);
 			Iterator<T> operator+(int delta);
@@ -107,6 +108,9 @@ int main(void) {
 	it2 = list.end();
 	it3 = list.begin();
 
+
+	/*
+
 	std:: cout << "it1 begin: " << *it1 << std:: endl;
 	std:: cout << "it2 end: "   << *it2 << std:: endl;
 
@@ -144,12 +148,14 @@ int main(void) {
 
 
 
+
+
 	std:: cout << "new it3: "  << *it3  << std:: endl;
 
 	it1++;
 	it2 = it1;
 	it3 = it1 + 2;
-	it3 -= 10;
+	it3 -= 3;
 	std:: cout << "new it1: "  << *it1  << std:: endl;
 	std:: cout << "new it2: "  << *it2  << std:: endl;
 	std:: cout << "new it3: "  << *it3  << std:: endl;
@@ -160,9 +166,35 @@ int main(void) {
 	it3+=5;
 	std:: cout << "new it3: "  << *it3  << std:: endl;
 
-	std:: cout << "new it3: "  << *it3  << std:: endl;
+	it3 = it1 - 10;
 	std:: cout << "new it3: "  << *it3  << std:: endl;
 
+	*/
+
+
+
+	/*
+
+	it3++;
+	std:: cout << "new it3: "  << *it3  << std:: endl;
+
+
+	it3.erase();
+	std:: cout << "new it3: "  << *it3  << std:: endl;
+	it3++;
+	std:: cout << "new it3: "  << *it3  << std:: endl;
+
+	*/
+
+	std:: cout << "new it3: "  << *it3  << std:: endl;
+
+	it3++;
+	it3.insert(228);
+	std:: cout << "new it3: "  << *it3  << std:: endl;
+
+	list.Show();
+
+	//std:: cout << "new it3: "  << *it3  << std:: endl;
 
 	return 0;
 }
@@ -173,11 +205,39 @@ int main(void) {
 //----------
 
 template<typename T>
-LIST:: Iterator<T> & LIST:: Iterator<T>:: insert(const Iterator<T> & iterator, T m_elem) {
+LIST:: Iterator<T> & LIST:: Iterator<T>:: insert(T m_elem) {
 
-	//(iterator.next)->elem = m_elem;
+	Node<T> * NewNode = (Node<T> * ) malloc(sizeof(Node<T>));
+	NewNode->next = this->node->next;
+	NewNode->prev = this->node;
+	NewNode->elem = m_elem;
 
-	return iterator;
+	this->node->next = NewNode;
+	this->node->next->next->prev = NewNode;
+
+	/*
+
+	std:: cout << "this->node: " << this->node << std:: endl;
+	std:: cout << "this->node: " << this->node->next << std:: endl;
+	std:: cout << "node.next: " << NewNode->next << std:: endl;
+	std:: cout << "node.prev: " << NewNode->prev << std:: endl;
+	std:: cout << "node: "       << &NewNode    << std:: endl;
+
+	*/
+
+	return * this;
+}
+
+
+template<typename T>
+LIST:: Iterator<T> & LIST:: Iterator<T>:: erase() {
+
+	this->node->next->prev = this->node->prev;
+	this->node->prev->next = this->node->next;
+	this->node = this->node->next;
+	this->elem = &(this->node->prev->elem);
+
+	return * this;
 }
 
 
